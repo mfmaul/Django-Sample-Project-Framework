@@ -1,0 +1,5 @@
+*.log
+*.pyc
+migrations/
+__pychache__/
+.vscode/

@@ -1,0 +1,105 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load common_tags %}
+
+{% block head_content %}
+    <title>Item Entry</title>
+    <script src="{% static 'japps/itemjs/List.js' %}?id={% Guid %}"></script>
+    <script src="{% static 'japps/Common.js' %}?id={% Guid %}"></script>
+{% endblock %}
+
+{% block content %}
+<div ng-app="app" ng-controller="ctrl">
+    {% csrf_token %}
+    {% verbatim %}
+    <h1 class="mt-4">Item List</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Item</li>
+        <li class="breadcrumb-item active">List</li>
+    </ol>
+    
+    <div class="panel panel-body">
+
+        <!-- <div class="row">
+            <div class="form-group col-sm-12 col-md-4">
+                <label>Test</label>
+                <input class="form-control form-control-sm" type="text" placeholder="Keywords" ng-model="Keywords"/>
+            </div>
+        </div> -->
+
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-4">
+                <label for="SearchBy">Search By</label>
+                <select id="SearchBy" class="custom-select custom-select-sm" ng-model="SearchBy" ng-options="o.id as o.name for o in Options.SearchBy"></select>
+            </div>
+            <div class="form-group col-sm-12 col-md-6">
+                <label for="Keywords">Keywords</label>
+                <div class="input-group">
+                    <input id="Keywords" class="form-control form-control-sm" type="text" placeholder="Keywords" ng-model="Keywords"/>
+                    <div class="input-group-append">
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-primary" type="button" ng-click="Paging()">Search</button>
+                            <button class="btn btn-sm btn-secondary" type="button" ng-click="AddNew()">Add New</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="form-group col-sm-2 text-nowrap">
+                <label class="input-group">
+                    Show&nbsp;
+                    <select class="custom-select custom-select-sm form-control form-control-sm" ng-change="Paging()" ng-model="PageSize" ng-options="o for o in Options.PageSize"></select>
+                    &nbsp; entries
+                </label>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="text-center">Action</th>
+                        <th>Item Code</th>
+                        <th>Item Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th class="text-center">Action</th>
+                        <th>Item Code</th>
+                        <th>Item Name</th>
+                        <th>Price</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr ng-repeat="d in Data">
+                        <td class="text-center"><button class="btn btn-sm btn-success" type="button" ng-click="Edit(d.uid)">Edit</button></td>
+                        <td>{{ d.item_code }}</td>
+                        <td>{{ d.item_name }}</td>
+                        <td>{{ d.price | thousandSeparator }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <ul uib-pagination
+            ng-change="Paging()"
+            ng-model="PageIndex"
+            total-items="TotalRecords"
+            items-per-page="PageSize"
+            max-size="5"
+            rotate="false"
+            boundary-link-numbers="true"
+            class="justify-content-center btn btn-sm"></ul>
+        
+
+    </div>
+
+    {% endverbatim %}
+</div>
+{% endblock %}
