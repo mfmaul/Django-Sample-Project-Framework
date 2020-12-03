@@ -1,3 +1,7 @@
-venv\Scripts\activate
+didalem folder testproject pertama, jalanin command :
 
-venv\Scripts\deactivate.bat
+virtualenv venv (kalo belom ada venvnya)
+
+venv\Scripts\activate (untuk activate)
+
+venv\Scripts\deactivate.bat (untuk deactivate)
