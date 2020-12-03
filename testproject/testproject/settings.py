@@ -26,7 +26,7 @@ SECRET_KEY = '+qutjn%#$*$4dq3(z!@o3a=pb-(y7cwu1-&pthrsmithzg6jtr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.13', 'localhost']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -41,7 +41,12 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
 
+    'allauth', 
+    'allauth.account', 
+    'allauth.socialaccount', 
+
     'samples',
+
 ]
 
 MIDDLEWARE = [
@@ -72,6 +77,12 @@ TEMPLATES = [
     },
 ]
 
+# config allauth
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
 WSGI_APPLICATION = 'testproject.wsgi.application'
 
 
@@ -96,7 +107,7 @@ DATABASES = {
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
-        'AUTOCOMMIT': False
+        'AUTOCOMMIT': True
     }
 }
 
@@ -141,3 +152,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+SITE_ID = 1
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
