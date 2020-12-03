@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login Page</title>
+   <script src="{% static 'js/angular-1.8.0/angular.js' %}"></script>
+   <script src="{% static 'js/jquery.min.js' %}"></script>
+   <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous" />
+   <script src="{% static 'js/font-awesome/all.min.js' %}" crossorigin="anonymous"></script>
+   <script src="{% static 'js/ui-bootstrap-tpls-3.0.7.min.js' %}" crossorigin="anonymous"></script>
+   <script src="{% static 'js/bootstrap.min.js' %}" crossorigin="anonymous"></script>
+    <!--Fontawesome CDN-->
+	<link rel="stylesheet" href="{% static 'css/font-awesome/all.css' %}" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+	<!--Custom styles-->
+   <style>
+      /*
+      *
+      * ==========================================
+      * CUSTOM UTIL CLASSES
+      * ==========================================
+      *
+      */
+      .login,
+      .image {
+      min-height: 100vh;
+      }
+
+      .bg-image {
+      background-image: url("{% static 'assets/img/art-colorful-contemporary-2047905_dxtao7.jpg' %}");
+      background-size: cover;
+      background-position: center center;
+      }
+   </style>
+</head>
+<body>
+   <div class="container-fluid">
+      <div class="row no-gutter">
+            <!-- The image half -->
+            <div class="col-md-6 d-none d-md-flex bg-image"></div>
+
+
+            <!-- The content half -->
+            <div class="col-md-6 bg-light">
+               <div class="login d-flex align-items-center py-5">
+
+                  <!-- Demo content-->
+                  <div class="container">
+                        <div class="row">
+                           <div class="col-lg-10 col-xl-7 mx-auto">
+                              <h3 class="display-4">Welcome Back!</h3>
+                              <p class="text-muted mb-4">Please login using your account.</p>
+                              <form>
+                                    <div class="form-group mb-3">
+                                       <input id="inputEmail" type="email" placeholder="Email address" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4">
+                                    </div>
+                                    <div class="form-group mb-3">
+                                       <input id="inputPassword" type="password" placeholder="Password" required="" class="form-control rounded-pill border-0 shadow-sm px-4 text-primary">
+                                    </div>
+                                    <div class="custom-control custom-checkbox mb-3">
+                                       <input id="customCheck1" type="checkbox" checked class="custom-control-input">
+                                       <label for="customCheck1" class="custom-control-label">Remember password</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm">Sign in</button>
+                                    <!-- <div class="text-center d-flex justify-content-between mt-4"><p>Snippet by <a href="https://bootstrapious.com/snippets" class="font-italic text-muted"> 
+                                          <u>Boostrapious</u></a></p></div> -->
+                              </form>
+                           </div>
+                        </div>
+                  </div><!-- End -->
+
+               </div>
+            </div><!-- End -->
+
+      </div>
+   </div>
+   <script src="{% static 'js/jquery-3.5.1.slim.min.js' %}" crossorigin="anonymous"></script>
+   <script src="{% static 'js/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -31,4 +31,5 @@ urlpatterns = [
     path('Item/List', item_views.List, name='item_list'),
 
     path('', sample_views.Dashboard, name='dashboard'),
+    path('59a31cc6d6ae431a5a9e4b922c95fad743c75b39', sample_views.test, name='test'),
 ]

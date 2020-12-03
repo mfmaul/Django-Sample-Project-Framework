@@ -1,8 +1,10 @@
 from django.http import HttpResponse, JsonResponse
 import json
 import samples.controller.ItemController as ItemController
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required
 def ItemListData(request):
     try:
         data = json.loads(request.body)
@@ -20,6 +22,7 @@ def ItemListData(request):
         }
         return JsonResponse(context)
 
+@login_required
 def ItemGetData(request):
     try:
         data = json.loads(request.body)
@@ -37,6 +40,7 @@ def ItemGetData(request):
         }
         return JsonResponse(context)
 
+@login_required
 def ItemSaveUpdate(request):
     try:
         data = json.loads(request.body)

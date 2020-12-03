@@ -1,40 +1,81 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>{% block head_title %}{% endblock %}</title>
+    <script src="{% static 'js/angular-1.8.0/angular.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous" />
+    <script src="{% static 'js/font-awesome/all.min.js' %}" crossorigin="anonymous"></script>
+    <script src="{% static 'js/ui-bootstrap-tpls-3.0.7.min.js' %}" crossorigin="anonymous"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}" crossorigin="anonymous"></script>
+    <!--Fontawesome CDN-->
+    <link rel="stylesheet" href="{% static 'css/font-awesome/all.css' %}" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <!--Custom styles-->
+    <style>
+      /*
+      *
+      * ==========================================
+      * CUSTOM UTIL CLASSES
+      * ==========================================
+      *
+      */
+      .login,
+      .image {
+      min-height: 100vh;
+      }
+
+      .bg-image {
+      background-image: url("{% static 'assets/img/art-colorful-contemporary-2047905_dxtao7.jpg' %}");
+      background-size: cover;
+      background-position: center center;
+      }
+    </style>
     {% block extra_head %}
     {% endblock %}
-  </head>
-  <body>
+</head>
+<body>
     {% block body %}
+    <div class="container-fluid">
+      <div class="row no-gutter">
+            <!-- The image half -->
+            <div class="col-md-6 d-none d-md-flex bg-image"></div>
 
-    {% if messages %}
-    <div>
-      <strong>Messages:</strong>
-      <ul>
-        {% for message in messages %}
-        <li>{{message}}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
+            <!-- The content half -->
+            <div class="col-md-6 bg-light">
+                <div class="login d-flex align-items-center py-5">
 
-    <div>
-      <strong>Menu:</strong>
-      <ul>
-        {% if user.is_authenticated %}
-        <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
-        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
-        {% else %}
-        <li><a href="{% url 'account_login' %}">Sign In</a></li>
-        <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-        {% endif %}
-      </ul>
+                  <!-- Demo content-->
+                  <div class="container">
+                        <div class="row">
+                            <div class="col-lg-10 col-xl-7 mx-auto">
+                              {% if messages %}
+                              <strong>Messages:</strong>
+                              <ul>
+                                {% for message in messages %}
+                                <li> <p class="text-muted mb-4">{{ message }}</p></li>
+                                {% endfor %}
+                              </ul>
+                              {% endif %}
+                              
+                              {% block content %}
+                              {% endblock %}
+
+                            </div>
+                        </div>
+                  </div><!-- End -->
+
+                </div>
+            </div><!-- End -->
+
+      </div>
     </div>
-    {% block content %}
-    {% endblock %}
+    <script src="{% static 'js/jquery-3.5.1.slim.min.js' %}" crossorigin="anonymous"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
+    
     {% endblock %}
     {% block extra_body %}
     {% endblock %}
-  </body>
+</body>
 </html>

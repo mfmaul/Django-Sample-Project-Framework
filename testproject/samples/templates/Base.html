@@ -10,11 +10,22 @@
         <meta name="author" content="" />
         <link href="{% static 'css/styles.css' %}?id={% Guid %}" rel="stylesheet" />
         <script src="{% static 'js/angular-1.8.0/angular.js' %}"></script>
-        <script src="{% static 'js/jquery.min.js' %}"></script>
-        <link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" crossorigin="anonymous" />
         <script src="{% static 'js/font-awesome/all.min.js' %}" crossorigin="anonymous"></script>
         <script src="{% static 'js/ui-bootstrap-tpls-3.0.7.min.js' %}" crossorigin="anonymous"></script>
-        <script src="{% static 'js/bootstrap.min.js' %}" crossorigin="anonymous"></script>
+        <!-- <script src="{% static 'js/jquery.min.js' %}"></script> -->
+        <script src="{% static 'js/jquery-1-11-0.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap-311.min.js' %}"></script>
+        <!-- <script src="{% static 'js/bootstrap.min.js' %}" crossorigin="anonymous"></script> -->
+        <script>
+            $('.dropdown-toggle').click(function(){
+                var parent = $(this).parent();
+                if(parent.hasClass('open')) { 
+                    parent.removeClass('open'); 
+                } else {
+                    parent.addClass('open');
+                }
+            });
+        </script>
         {% block head_content %}
         {% endblock %}
     </head>
@@ -36,10 +47,14 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">Settings</a>
-                        <a class="dropdown-item" href="#">Activity Log</a>
+                        
+                        {% if user.is_authenticated %}
+                        <a class="dropdown-item" href="#">User : <strong>{{ user }}</strong></a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+                        {% else %}
+                        <a class="dropdown-item" href="{% url 'account_login' %}">Login</a>
+                        {% endif %}
                     </div>
                 </li>
             </ul>
@@ -172,6 +187,5 @@
         
         <script src="{% static 'js/jquery.dataTables.min.js' %}" crossorigin="anonymous"></script>
         <script src="{% static 'js/dataTables.bootstrap4.min.js' %}" crossorigin="anonymous"></script>
-        
     </body>
 </html>
