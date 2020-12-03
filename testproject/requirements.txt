@@ -1,0 +1,5 @@
+virtualenv
+django
+mysqlclient
+pymysql
+django-allauth

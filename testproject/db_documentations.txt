@@ -62,7 +62,7 @@ BEGIN
         SET @StartFrom = length(ValueCriteria) + 1;
         SET @EndUntil = length(@str2) - @StartFrom + 1;
         
-        SET @str2 = cast(substring(@str2, @StartFrom, @EndUntil) + 1 AS CHAR(500));
+        SET @str2 = ifnull(cast(substring(@str2, @StartFrom, @EndUntil) + 1 AS CHAR(500)), '1');
     END IF;
     
     SET @i = 0;
