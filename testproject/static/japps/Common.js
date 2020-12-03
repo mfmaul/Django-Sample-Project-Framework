@@ -356,6 +356,11 @@ function GetQueryString() {
     return vars;
 }
 
+function SetQueryString(q) {
+    q = q && (q.startsWith('?') && q || '?' + q) || '';
+    window.history.replaceState(null, null, window.location.pathname + q);
+}
+
 function NEWID() {
     //https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>

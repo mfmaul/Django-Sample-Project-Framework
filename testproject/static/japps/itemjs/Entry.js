@@ -40,8 +40,10 @@ app.controller('ctrl', function ($scope, $timeout, svc, common) {
                 var data = response.data;
                 if (data.ProcessSuccess) {
                     $scope.header = data.d.List[0];
+                    SetQueryString(`uid=${$scope.Uid}`);
                 } else {
                     console.log(data.InfoMessage);
+                    SetQueryString();
                 }
             }, 
                 function (data, status) {
@@ -67,6 +69,8 @@ app.controller('ctrl', function ($scope, $timeout, svc, common) {
             console.log(data);
             if (data.ProcessSuccess){
                 $scope.header = data.d;
+                $scope.Uid = $scope.header.uid;
+                $scope.GetData();
                 alert('Save success.');
             } else {
                 alert('Error : ' + data.InfoMessage);
