@@ -16,7 +16,7 @@ def ItemListData(PageIndex, PageSize, SearchBy, Keywords):
     RecordCount = result.out['RecordCount']
     db.clearParameter()
 
-    db.closeConnection(False)
+    db.closeConnection()
 
     data = {
         'List': result.record,
@@ -35,6 +35,7 @@ def ItemSaveUpdate(header):
     if not header['uid']:
         header['uid'] = common.Guid()
         header['item_code'] = common.AutoCounter('item_code', 'mst_item', 'item_code', 'ITM', 4) # FieldName, TableName, FieldCriteria, ValueCriteria, LengthOfString
+        print(header['item_code'])
     
     db = dbm.dbcmd()
     db.commandText = 'usp_mst_item_SaveUpdate'
@@ -46,7 +47,7 @@ def ItemSaveUpdate(header):
     db.addInParameter('rowstatus', header['rowstatus'])
     db.addInParameter('modified_by', header['modified_by'])
     db.ExecuteNonResult()
-    db.closeConnection(True)
+    db.closeConnection()
 
     return header
     
