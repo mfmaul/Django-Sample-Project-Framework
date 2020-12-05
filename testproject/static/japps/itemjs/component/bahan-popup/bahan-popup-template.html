@@ -1,0 +1,64 @@
+<div class="modal fade" id="{{$ctrl.id}}" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Bahan Popup</h4>
+                <button type="button" class="close" ng-click="$ctrl.closePopup()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="form-group col-sm-12 col-md-4">
+                            <label>Search By</label>
+                            <select class="custom-select custom-select-sm" ng-model="$ctrl.SearchBy" ng-options="o.id as o.name for o in $ctrl.Options.SearchBy"></select>
+                        </div>
+                        <div class="form-group col-sm-12 col-md-6">
+                            <label>Keywords</label>
+                            <div class="input-group">
+                                <input class="form-control form-control-sm" type="text" placeholder="Keywords" ng-model="$ctrl.Keywords" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-primary" type="button" ng-click="$ctrl.Paging()">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th class="text-center">Action</th>
+                                    <th>No</th>
+                                    <th>Bahan Code</th>
+                                    <th>Bahan Name</th>
+                                    <th>Stock Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="i in $ctrl.Data">
+                                    <td class="text-center align-middle"><button type="button" class="btn elistec-btn-select" ng-click="$ctrl.Select(i); $ctrl.closePopup()">Select</button></td>
+                                    <td class="align-middle">{{i.no}}</td>
+                                    <td class="align-middle">{{i.bahan_code}}</td>
+                                    <td class="align-middle">{{i.bahan_name}}</td>
+                                    <td class="align-middle">{{i.stock_qty}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul uib-pagination
+                        ng-change="$ctrl.Paging()"
+                        ng-model="$ctrl.PageIndex"
+                        total-items="$ctrl.TotalRecords"
+                        items-per-page="$ctrl.PageSize"
+                        max-size="5"
+                        rotate="false"
+                        boundary-link-numbers="true"
+                        class="justify-content-center"></ul>
+                </form>
+            </div>
+            <!--
+            <div class="modal-footer">
+            </div>
+            -->
+        </div>
+    </div>
+</div>

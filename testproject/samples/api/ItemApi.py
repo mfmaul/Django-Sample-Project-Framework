@@ -51,7 +51,10 @@ def ItemSaveUpdate(request):
     try:
         data = json.loads(request.body)
         data['header']['modified_by'] = str(request.user)
-        items = ItemController.ItemSaveUpdate(data['header'])
+        items = ItemController.ItemSaveUpdate(
+            header=data['header'],
+            detail=data['detail']
+        )
         context = {
             'd': items,
             'ProcessSuccess': True

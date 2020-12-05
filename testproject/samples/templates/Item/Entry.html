@@ -6,12 +6,16 @@
     <title>Item Entry</title>
     <script src="{% static 'japps/itemjs/Entry.js' %}?id={% Guid %}"></script>
     <script src="{% static 'japps/Common.js' %}?id={% Guid %}"></script>
+    <script src="{% static 'japps/itemjs/component/bahan-popup/bahan-popup-component.js' %}?id={% Guid %}"></script>
 {% endblock %}
 
 {% block content %}
 <div ng-app="app" ng-controller="ctrl">
     {% csrf_token %}
     {% verbatim %}
+
+    <bahan-popup popup-id="popup-bahan" on-select="PopupSelect.Bahan"></bahan-popup>
+
     <h1 class="mt-4">Item Entry</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Item</li>
@@ -39,14 +43,126 @@
                     </div>
                     <div class="form-group">
                         <label>Price</label>
-                        <input class="form-control form-control-sm" type="text" ng-model="header.price" thousand-separator integer min="0" />
+                        <input class="form-control form-control-sm" type="text" ng-model="header.price" thousand-separator integer min="1" />
                     </div>
                 </div>
             </div>
         </ng-form>
 
+        <hr />
+
+        <div class="panel-tab">
+            <nav class="panel-tab-heading nav-tabs-wrapper">
+                <div class="nav nav-tabs dragscroll horizontal" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-1-tab" data-toggle="tab" href="#nav-1" role="tab" aria-controls="nav-1" aria-selected="true">
+                        Recipe Detail
+                    </a>
+                    <a class="nav-item nav-link" id="nav-2-tab" data-toggle="tab" href="#nav-2" role="tab" aria-controls="nav-2" aria-selected="false">
+                        Last Transaction
+                    </a>
+                </div>
+            </nav>
+            <div class="panel-tab-body">
+                <div class="tab-content" id="nav-tabContent">
+                    <!-- Start: Tab-Content Details -->
+                    <div class="tab-pane fade show active" id="nav-1" role="tabpanel"
+                        aria-labelledby="nav-1-tab">
+                        <ng-form name="recipeDetailForm" isolate-form>
+                            <div class="row mt-3">
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="form-group">
+                                        <label>Bahan Code</label>
+                                        
+                                        <div class="input-group">
+                                            <input class="form-control form-control-sm" type="text" ng-model="bahan_code" readonly ng-required="true" />
+                                            <div class="input-group-append">
+                                                <button class="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#popup-bahan" ng-click="$broadcast('popup-bahan')">...</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Bahan Name</label>
+                                        <input class="form-control form-control-sm" type="text" ng-model="bahan_name" readonly ng-required="true" />
+                                    </div>
+                                </div>
+                    
+                                <div class="col-sm-12 col-md-4">
+
+                                    <div class="form-group">
+                                        <label>Qty/Unit</label>
+                                        <div class="input-group">
+                                            <input class="form-control form-control-sm" type="text" ng-model="recipe_qty" thousand-separator integer min="1" />
+                                            <span>
+                                                <select class="custom-select custom-select-sm" ng-model="unit_code" ng-options="o.id as o.name for o in Options.Unit" ng-required="true"></select>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mt-5">
+                                        <button class="btn btn-sm btn-danger" type="button" ng-click="ResetRecipeForm()">Reset</button>
+                                        <button class="btn btn-sm btn-secondary" type="button" ng-click="AddRecipe()" ng-disabled="recipeDetailForm.$invalid">Add</button>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </ng-form>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th class="text-center align-middle">Action</th>
+                                        <th class="text-center align-middle">No</th>
+                                        <th class="text-center align-middle">Bahan Code</th>
+                                        <th class="text-center align-middle">Bahan Name</th>
+                                        <th class="text-center align-middle">Quantity</th>
+                                        <th class="text-center align-middle">Unit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="d in detail">
+                                        <td class="text-center align-middle"><button class="btn btn-sm btn-danger" type="button" ng-click="RemoveRecipe(d, $index)">Remove</button></td>
+                                        <td class="text-center align-middle">{{ $index+1 }}</td>
+                                        <td class="text-center align-middle">{{ d.bahan_code }}</td>
+                                        <td class="text-center align-middle">{{ d.bahan_name }}</td>
+                                        <td class="text-center align-middle">{{ d.qty | thousandSeparator }}</td>
+                                        <td class="text-center align-middle">{{ d.unit_code }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- End: Tab-Content Details -->
+
+                    <!-- Start: Tab-Content Supporting Document -->
+                    <div class="tab-pane fade" id="nav-2" role="tabpanel" aria-labelledby="nav-2-tab">
+            
+                        <div class=" table-responsive">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th class="text-center align-middle">No</th>
+                                        <th class="text-center align-middle">Transaction Date</th>
+                                        <th class="text-center align-middle">PIC</th>
+                                        <th class="text-center align-middle">QTY</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- End: Tab-Content Supporting Document -->
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        
         <div class="pb-3">
-            <hr />
+            
             <div class="row justify-content-center">
                 <div class="btn-group">
                     <button class="btn btn-sm btn-primary" type="button" ng-click="SaveUpdate()" ng-disabled="headerForm.$invalid" >Save</button>
