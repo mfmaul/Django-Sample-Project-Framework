@@ -28,11 +28,15 @@
                     </div>
                     <div class="form-group">
                         <label>Item Name</label>
-                        <input class="form-control form-control-sm" type="text" ng-model="header.item_name"  />
+                        <input class="form-control form-control-sm" type="text" ng-model="header.item_name" ng-required="true" />
                     </div>
                 </div>
     
                 <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>Item Type</label>
+                        <select class="custom-select custom-select-sm" ng-model="header.item_type" ng-options="o.id as o.name for o in Options.ItemType" ng-required="true"></select>
+                    </div>
                     <div class="form-group">
                         <label>Price</label>
                         <input class="form-control form-control-sm" type="text" ng-model="header.price" thousand-separator integer min="0" />
@@ -45,8 +49,8 @@
             <hr />
             <div class="row justify-content-center">
                 <div class="btn-group">
-                    <button class="btn btn-sm btn-primary" type="button" ng-click="SaveUpdate()" >Save</button>
-                    <button class="btn btn-sm btn-danger" type="button" ng-click="Delete()" >Delete</button>
+                    <button class="btn btn-sm btn-primary" type="button" ng-click="SaveUpdate()" ng-disabled="headerForm.$invalid" >Save</button>
+                    <button class="btn btn-sm btn-danger" type="button" ng-click="Delete()" ng-disabled="!Uid">Delete</button>
                     <button class="btn btn-sm btn-warning" type="button" ng-click="Back()" >Back</button>
                 </div>
             </div>

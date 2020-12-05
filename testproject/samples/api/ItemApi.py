@@ -8,7 +8,13 @@ from django.contrib.auth.decorators import login_required
 def ItemListData(request):
     try:
         data = json.loads(request.body)
-        items = ItemController.ItemListData(data['PageIndex'], data['PageSize'], data['SearchBy'], data['Keywords'])
+        items = ItemController.ItemListData(
+            PageIndex=data['PageIndex'], 
+            PageSize=data['PageSize'], 
+            item_type=data['item_type'],
+            SearchBy=data['SearchBy'], 
+            Keywords=data['Keywords']
+        )
         context = {
             'd': items,
             'ProcessSuccess': True

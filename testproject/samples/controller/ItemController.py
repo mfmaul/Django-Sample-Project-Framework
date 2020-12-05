@@ -3,12 +3,13 @@ import samples.dbmanager as dbm
 import samples.common as common
 
 # Create your views here.
-def ItemListData(PageIndex=1, PageSize=None, SearchBy=None, Keywords=None):
+def ItemListData(PageIndex=1, PageSize=None, item_type=None, SearchBy=None, Keywords=None):
     db = dbm.dbcmd()
     db.commandText = 'usp_mst_item_ListData'
     db.commandType = 'StoredProcedure'
     db.addInParameter('PageIndex', PageIndex)
     db.addInParameter('PageSize', PageSize)
+    db.addInParameter('item_type', item_type)
     db.addInParameter('SearchBy', SearchBy)
     db.addInParameter('Keywords', Keywords)
     db.addOutParameter('RecordCount', 0)
@@ -26,10 +27,10 @@ def ItemListData(PageIndex=1, PageSize=None, SearchBy=None, Keywords=None):
     return data
 
 def ItemGetData(uid):
-    return ItemListData(1, None, 'A.uid', uid)
+    return ItemListData(SearchBy='A.uid', Keywords=uid)
 
 def ItemSaveUpdate(header):
-    saveParam = ['uid', 'item_code', 'item_name', 'price', 'rowstatus', 'modified_by'] # ini parameter yg dikirim ke sp saveupdate
+    saveParam = ['uid', 'item_code', 'item_name', 'price', 'item_type', 'rowstatus', 'modified_by'] # ini parameter yg dikirim ke sp saveupdate
     header = common.PrepareModelDict(saveParam, header)
 
     if not header['uid']:
@@ -44,6 +45,7 @@ def ItemSaveUpdate(header):
     db.addInParameter('item_code', header['item_code'])
     db.addInParameter('item_name', header['item_name'])
     db.addInParameter('price', header['price'])
+    db.addInParameter('item_type', header['item_type'])
     db.addInParameter('rowstatus', header['rowstatus'])
     db.addInParameter('modified_by', header['modified_by'])
     db.ExecuteNonResult()

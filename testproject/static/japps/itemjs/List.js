@@ -6,10 +6,11 @@ app.config(['$httpProvider', function($httpProvider) {
 }]);
 
 app.service("svc", function ($http) {
-    this.svc_ListData = function (PageIndex, PageSize, SearchBy, Keywords) {
+    this.svc_ListData = function (PageIndex, PageSize, item_type, SearchBy, Keywords) {
         var params = { 
             PageIndex: PageIndex,
             PageSize: PageSize,
+            item_type: item_type,
             SearchBy: SearchBy,
             Keywords: Keywords,
         }
@@ -29,6 +30,7 @@ app.controller('ctrl', function ($scope, $timeout, svc, common) {
     $scope.PageIndex = 1;
     $scope.PageSize = 5;
     $scope.SearchBy = '';
+    $scope.item_type = '';
     $scope.Keywords = '';
     $scope.TotalRecords = 0;
     $scope.Options = {};
@@ -38,14 +40,20 @@ app.controller('ctrl', function ($scope, $timeout, svc, common) {
         {id: 'A.item_name', name:'Item Name'},
     ];
     $scope.Options.PageSize = [5, 10, 25, 50, 100];
+    $scope.Options.ItemType = [
+        {id: '', name: 'All'},
+        {id: 'Makanan', name: 'Makanan'},
+        {id: 'Minuman', name: 'Minuman'},
+    ];
 
     $scope.Paging = function () {
         var PageIndex = $scope.PageIndex;
         var PageSize = $scope.PageSize;
         var SearchBy = $scope.SearchBy;
         var Keywords = $scope.Keywords;
+        var item_type = $scope.item_type;
 
-        var proc = svc.svc_ListData(PageIndex, PageSize, SearchBy, Keywords);
+        var proc = svc.svc_ListData(PageIndex, PageSize, item_type, SearchBy, Keywords);
         proc.then(function (response) {
             var data = response.data;
             console.log(data);

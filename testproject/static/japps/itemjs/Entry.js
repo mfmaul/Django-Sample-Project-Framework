@@ -30,7 +30,13 @@ app.service("svc", function ($http) {
 
 app.controller('ctrl', function ($scope, $timeout, svc, common) {
     $scope.Uid = GetQueryString()['uid'];
-    $scope.header = {};
+    $scope.header = { item_type: '' };
+    $scope.Options = {};
+    $scope.Options.ItemType = [
+        {id: '', name: 'Please select one.'},
+        {id: 'Makanan', name: 'Makanan'},
+        {id: 'Minuman', name: 'Minuman'},
+    ];
 
     $scope.GetData = function () {
         var uid = $scope.Uid;
@@ -61,6 +67,7 @@ app.controller('ctrl', function ($scope, $timeout, svc, common) {
             item_code: $scope.header.item_code,
             item_name: $scope.header.item_name,
             price: $scope.header.price,
+            item_type: $scope.header.item_type,
             rowstatus: 1
         };
         var proc = svc.svc_SaveUpdate(header);
@@ -87,6 +94,7 @@ app.controller('ctrl', function ($scope, $timeout, svc, common) {
             item_code: $scope.header.item_code,
             item_name: $scope.header.item_name,
             price: $scope.header.price,
+            item_type: $scope.header.item_type,
             rowstatus: 0
         };
         var proc = svc.svc_SaveUpdate(header);
