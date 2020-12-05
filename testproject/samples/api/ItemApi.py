@@ -44,8 +44,7 @@ def ItemGetData(request):
 def ItemSaveUpdate(request):
     try:
         data = json.loads(request.body)
-        data['header']['modified_by'] = 'del'
-        print(data)
+        data['header']['modified_by'] = str(request.user)
         items = ItemController.ItemSaveUpdate(data['header'])
         context = {
             'd': items,

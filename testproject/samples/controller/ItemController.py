@@ -3,7 +3,7 @@ import samples.dbmanager as dbm
 import samples.common as common
 
 # Create your views here.
-def ItemListData(PageIndex, PageSize, SearchBy, Keywords):
+def ItemListData(PageIndex=1, PageSize=None, SearchBy=None, Keywords=None):
     db = dbm.dbcmd()
     db.commandText = 'usp_mst_item_ListData'
     db.commandType = 'StoredProcedure'
