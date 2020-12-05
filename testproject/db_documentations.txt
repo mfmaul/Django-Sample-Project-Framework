@@ -61,6 +61,36 @@ create table mst_unit(
     modified_date	datetime
 )
 
+create table trans_order(
+    uid	varchar(50) not null primary key,
+    order_code 	varchar(50) unique,
+    order_date 	datetime,
+    total_item	int,
+    total_price	numeric(26, 4),
+    close_order	int,
+    rowstatus	int(11),
+    created_by	varchar(100),
+    created_date	datetime,
+    modified_by	varchar(100),
+    modified_date	datetime
+);
+
+create table trans_order_detail(
+    uid	varchar(50) not null primary key,
+    order_uid 	varchar(50),
+    order_code 	varchar(50),
+    order_date 	datetime,
+    item_uid	varchar(50),
+    item_code	varchar(50),
+    item_name	varchar(100),
+    item_type	varchar(50),
+    qty			decimal(26, 4),
+    rowstatus	int(11),
+    created_by	varchar(100),
+    created_date	datetime,
+    modified_by	varchar(100),
+    modified_date	datetime
+);
 
 
 USE `testproject`;
