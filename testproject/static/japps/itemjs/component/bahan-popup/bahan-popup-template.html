@@ -22,6 +22,23 @@
                             </div>
                         </div>
                     </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="form-group col-sm-2 text-nowrap">
+                            <label class="input-group">
+                                Show&nbsp;
+                                <select 
+                                    class="custom-select custom-select-sm form-control form-control-sm" 
+                                    ng-change="$ctrl.Paging()" 
+                                    ng-model="$ctrl.PageSize" 
+                                    ng-options="o for o in $ctrl.Options.PageSize"></select>
+                                &nbsp; entries
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead class="thead-dark">
@@ -52,7 +69,7 @@
                         max-size="5"
                         rotate="false"
                         boundary-link-numbers="true"
-                        class="justify-content-center"></ul>
+                        class="justify-content-center btn btn-sm"></ul>
                 </form>
             </div>
             <!--

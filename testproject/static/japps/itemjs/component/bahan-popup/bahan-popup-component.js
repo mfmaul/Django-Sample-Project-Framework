@@ -35,6 +35,8 @@ angular
                 $ctrl.TotalRecords = 0;
                 $ctrl.Options = {};
 
+                $ctrl.Options.PageSize = [10, 25, 50, 100];
+
                 $ctrl.Options.SearchBy = [
                     { id: '', name: 'All' },
                     { id: 'A.bahan_code', name: 'Bahan Code' },
