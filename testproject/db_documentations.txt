@@ -7,8 +7,8 @@ grant all privileges on testproject.*  to 'testproject-admin'@'localhost';
 use testproject;
 
 create table mst_item(
-    uid	varchar(50),
-    item_code	varchar(50),
+    uid	varchar(50) not null primary key,
+    item_code	varchar(50) unique,
     item_name	varchar(100),
     price	decimal(26,4),
     rowstatus	int(11),
@@ -17,6 +17,48 @@ create table mst_item(
     modified_by	varchar(100),
     modified_date	datetime
 );
+
+create table mst_item_recipe(
+    uid	varchar(50) not null primary key,
+    item_uid	varchar(50) unique,
+    item_code	varchar(50),
+    item_name	varchar(100),
+    bahan_uid	varchar(50),
+    bahan_code	varchar(50),
+    bahan_name	varchar(100),
+    qty			decimal(26, 4),
+    unit_code	varchar(50),
+    rowstatus	int(11),
+    created_by	varchar(100),
+    created_date	datetime,
+    modified_by	varchar(100),
+    modified_date	datetime
+);
+
+create table mst_bahan(
+	uid varchar(50) not null primary key,
+    bahan_code varchar(50) unique,
+    bahan_name varchar(50),
+    stock_qty decimal(26, 4),
+    rowstatus	int(11),
+    created_by	varchar(100),
+    created_date	datetime,
+    modified_by	varchar(100),
+    modified_date	datetime
+);
+
+create table mst_unit(
+	uid varchar(50) not null primary key,
+    unit_code varchar(50) unique,
+    unit_name varchar(50),
+    rowstatus	int(11),
+    created_by	varchar(100),
+    created_date	datetime,
+    modified_by	varchar(100),
+    modified_date	datetime
+)
+
+
 
 USE `testproject`;
 DROP procedure IF EXISTS `proc_AutoCounter`;
@@ -181,6 +223,118 @@ BEGIN
         SET
 			A.item_name = item_name,
             A.price = price,
+            A.rowstatus = rowstatus,
+            A.modified_by = modified_by,
+            A.modified_date = current_timestamp()
+		WHERE A.uid = uid;
+    END IF;
+END$$
+
+DELIMITER ;
+;
+
+USE `testproject`;
+DROP procedure IF EXISTS `usp_mst_bahan_ListData`;
+
+USE `testproject`;
+DROP procedure IF EXISTS `testproject`.`usp_mst_bahan_ListData`;
+;
+
+DELIMITER $$
+USE `testproject`$$
+CREATE DEFINER=`testproject-admin`@`localhost` PROCEDURE `usp_mst_bahan_ListData`(
+	IN PageIndex INT,
+    IN PageSize INT,
+    IN SearchBy VARCHAR(50),
+    IN Keywords VARCHAR(100),
+    OUT RecordCount INT
+)
+BEGIN
+	SET Keywords = REPLACE(Keywords, ';', '%');
+    IF Keywords IS NULL THEN SET Keywords = ''; END IF;
+    IF SearchBy IS NULL THEN SET SearchBy = ''; END IF;
+    IF PageIndex IS NULL THEN SET PageIndex = 1; END IF;
+    
+    SET @SQL = '
+		FROM mst_bahan A
+        WHERE
+			A.rowstatus = 1
+    ';  
+    
+    IF SearchBy = '' OR SearchBy IS NULL THEN
+		SET @SQL = CONCAT(@SQL, '
+			AND (
+				A.bahan_code LIKE \'%', Keywords, '%\' OR
+                A.bahan_name LIKE \'%', Keywords, '%\'
+            )
+        ');
+	ELSE 
+		SET @SQL = CONCAT(@SQL, 'AND ', SearchBy, ' LIKE \'%', Keywords, '%\'');
+	END IF;
+    
+    SET @CountSQL = CONCAT('SELECT COUNT(*) INTO @RecordCount', @SQL);
+    
+    PREPARE count_stmt FROM @CountSQL;
+	EXECUTE count_stmt;
+	DEALLOCATE PREPARE count_stmt; 
+    
+    SET RecordCount = @RecordCount;
+    
+    SET @SQL = CONCAT('
+		SELECT
+			ROW_NUMBER() OVER(ORDER BY A.bahan_code) AS no,
+			A.*
+    ', @SQL);
+    
+    IF PageSize IS NOT NULL THEN
+		SET @SQL = CONCAT(
+			'SELECT * FROM (', @SQL, ') Z WHERE Z.No BETWEEN ', 
+            ((PageIndex - 1) * PageSize + 1), ' AND ', ((PageIndex - 1) * PageSize + PageSize)
+        );
+	END IF;
+    
+    PREPARE stmt FROM @SQL;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt; 
+END$$
+
+DELIMITER ;
+;
+
+USE `testproject`;
+DROP procedure IF EXISTS `usp_mst_bahan_SaveUpdate`;
+
+USE `testproject`;
+DROP procedure IF EXISTS `testproject`.`usp_mst_bahan_SaveUpdate`;
+;
+
+DELIMITER $$
+USE `testproject`$$
+CREATE DEFINER=`testproject-admin`@`localhost` PROCEDURE `usp_mst_bahan_SaveUpdate`(
+	IN uid VARCHAR(50),
+    IN bahan_code VARCHAR(50),
+    IN bahan_name VARCHAR(100),
+    IN stock_qty NUMERIC(26, 4),
+    IN rowstatus INT,
+    IN modified_by VARCHAR(100)
+)
+BEGIN
+	IF NOT EXISTS (SELECT 1 FROM mst_bahan A WHERE A.uid = uid) THEN
+		INSERT INTO mst_bahan(
+			uid, bahan_code, bahan_name, stock_qty,
+            rowstatus, created_by, created_date,
+            modified_by, modified_date
+        ) 
+        VALUES(
+			uid, bahan_code, bahan_name, stock_qty,
+            rowstatus, modified_by, current_timestamp(),
+			modified_by, current_timestamp()
+        ); 
+    ELSE
+		UPDATE mst_bahan A
+        SET
+			A.bahan_name = bahan_name,
+            A.stock_qty = stock_qty,
             A.rowstatus = rowstatus,
             A.modified_by = modified_by,
             A.modified_date = current_timestamp()

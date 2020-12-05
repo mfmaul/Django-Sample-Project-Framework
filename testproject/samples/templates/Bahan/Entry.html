@@ -1,0 +1,59 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load common_tags %}
+
+{% block head_content %}
+    <title>Bahan Entry</title>
+    <script src="{% static 'japps/bahanjs/Entry.js' %}?id={% Guid %}"></script>
+    <script src="{% static 'japps/Common.js' %}?id={% Guid %}"></script>
+{% endblock %}
+
+{% block content %}
+<div ng-app="app" ng-controller="ctrl">
+    {% csrf_token %}
+    {% verbatim %}
+    <h1 class="mt-4">Bahan Entry</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Bahan</li>
+        <li class="breadcrumb-item active">Entry</li>
+    </ol>
+
+    <div class="panel panel-body">
+        <ng-form name="headerForm">
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>Bahan Code</label>
+                        <input class="form-control form-control-sm" type="text" ng-model="header.bahan_code" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Bahan Name</label>
+                        <input class="form-control form-control-sm" type="text" ng-model="header.bahan_name"  />
+                    </div>
+                </div>
+    
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>Stock Qty</label>
+                        <input class="form-control form-control-sm" type="text" ng-model="header.stock_qty" thousand-separator integer min="0" />
+                    </div>
+                </div>
+            </div>
+        </ng-form>
+
+        <div class="pb-3">
+            <hr />
+            <div class="row justify-content-center">
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-primary" type="button" ng-click="SaveUpdate()" >Save</button>
+                    <button class="btn btn-sm btn-danger" type="button" ng-click="Delete()" >Delete</button>
+                    <button class="btn btn-sm btn-warning" type="button" ng-click="Back()" >Back</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {% endverbatim %}
+</div>
+{% endblock %}
