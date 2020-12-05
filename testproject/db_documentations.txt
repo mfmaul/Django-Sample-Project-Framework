@@ -23,7 +23,7 @@ ADD COLUMN `item_type` VARCHAR(50) NULL DEFAULT NULL AFTER `price`;
 
 create table mst_item_recipe(
     uid	varchar(50) not null primary key,
-    item_uid	varchar(50) unique,
+    item_uid	varchar(50),
     item_code	varchar(50),
     item_name	varchar(100),
     bahan_uid	varchar(50),
@@ -351,6 +351,158 @@ BEGIN
             A.modified_date = current_timestamp()
 		WHERE A.uid = uid;
     END IF;
+END$$
+
+DELIMITER ;
+;
+
+USE `testproject`;
+DROP procedure IF EXISTS `usp_mst_item_recipe_SaveUpdate`;
+
+USE `testproject`;
+DROP procedure IF EXISTS `testproject`.`usp_mst_item_recipe_SaveUpdate`;
+;
+
+DELIMITER $$
+USE `testproject`$$
+CREATE DEFINER=`testproject-admin`@`localhost` PROCEDURE `usp_mst_item_recipe_SaveUpdate`(
+	IN uid VARCHAR(50),
+    IN item_uid VARCHAR(50),
+    IN item_code VARCHAR(50),
+    IN item_name VARCHAR(100),
+    IN bahan_uid VARCHAR(50),
+    IN bahan_code VARCHAR(50),
+    IN bahan_name VARCHAR(100),
+    IN qty NUMERIC(26, 4),
+    IN unit_code VARCHAR(50),
+    IN rowstatus INT,
+    IN modified_by VARCHAR(100)
+)
+BEGIN
+	IF NOT EXISTS (SELECT 1 FROM mst_item_recipe A WHERE A.uid = uid) THEN
+		INSERT INTO mst_item_recipe(
+			uid, item_uid, item_code, item_name,
+            bahan_uid, bahan_code, bahan_name, qty, unit_code,
+            rowstatus, created_by, created_date,
+            modified_by, modified_date
+        ) 
+        VALUES( 
+			uid, item_uid, item_code, item_name,
+            bahan_uid, bahan_code, bahan_name, qty, unit_code,
+            rowstatus, modified_by, current_timestamp(),
+			modified_by, current_timestamp()
+        );
+    ELSE 
+		UPDATE mst_item_recipe A
+        SET
+			A.bahan_uid = bahan_uid,
+            A.bahan_code = bahan_code,
+            A.bahan_name = bahan_name,
+            A.qty = qty,
+            A.unit_code = unit_code,
+            A.rowstatus = rowstatus,
+            A.modified_by = modified_by,
+            A.modified_date = current_timestamp() 
+		WHERE A.uid = uid;
+    END IF;
+END$$
+
+DELIMITER ;
+;
+
+USE `testproject`;
+DROP procedure IF EXISTS `usp_mst_item_recipe_ListData`;
+
+USE `testproject`;
+DROP procedure IF EXISTS `testproject`.`usp_mst_item_recipe_ListData`;
+;
+
+DELIMITER $$
+USE `testproject`$$
+CREATE DEFINER=`testproject-admin`@`localhost` PROCEDURE `usp_mst_item_recipe_ListData`(
+	IN PageIndex INT,
+    IN PageSize INT,
+    IN item_uid VARCHAR(50),
+    IN item_code VARCHAR(50),
+    IN SearchBy VARCHAR(50),
+    IN Keywords VARCHAR(100),
+    OUT RecordCount INT
+)
+BEGIN
+	SET Keywords = REPLACE(Keywords, ';', '%');
+    IF Keywords IS NULL THEN SET Keywords = ''; END IF;
+    IF SearchBy IS NULL THEN SET SearchBy = ''; END IF;
+    IF PageIndex IS NULL THEN SET PageIndex = 1; END IF;
+    IF item_uid IS NULL THEN SET item_uid = ''; END IF;
+    IF item_code IS NULL THEN SET item_code = ''; END IF;
+    
+    SET @SQL = '
+		FROM mst_item_recipe A
+        WHERE
+			A.rowstatus = 1
+    '; 
+    
+    SET @SQL = CONCAT(@SQL, ' AND A.item_uid = \'', item_uid, '\' ');
+    SET @SQL = CONCAT(@SQL, ' AND A.item_code = \'', item_code, '\' ');
+    
+    IF SearchBy = '' OR SearchBy IS NULL THEN
+		SET @SQL = CONCAT(@SQL, '
+			AND (
+				A.bahan_code LIKE \'%', Keywords, '%\' OR
+                A.bahan_name LIKE \'%', Keywords, '%\'
+            )
+        ');
+	ELSE 
+		SET @SQL = CONCAT(@SQL, 'AND ', SearchBy, ' LIKE \'%', Keywords, '%\'');
+	END IF;
+    
+    SET @CountSQL = CONCAT('SELECT COUNT(*) INTO @RecordCount', @SQL);
+    
+    PREPARE count_stmt FROM @CountSQL;
+	EXECUTE count_stmt;
+	DEALLOCATE PREPARE count_stmt; 
+    
+    SET RecordCount = @RecordCount;
+    
+    SET @SQL = CONCAT('
+		SELECT
+			ROW_NUMBER() OVER(ORDER BY A.created_date) AS no,
+			A.*
+    ', @SQL);
+    
+    IF PageSize IS NOT NULL THEN
+		SET @SQL = CONCAT(
+			'SELECT * FROM (', @SQL, ') Z WHERE Z.No BETWEEN ', 
+            ((PageIndex - 1) * PageSize + 1), ' AND ', ((PageIndex - 1) * PageSize + PageSize)
+        );
+	END IF;
+    
+    PREPARE stmt FROM @SQL;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt; 
+END$$
+
+DELIMITER ;
+;
+
+USE `testproject`;
+DROP procedure IF EXISTS `proc_GetData`;
+
+USE `testproject`;
+DROP procedure IF EXISTS `testproject`.`proc_GetData`;
+;
+
+DELIMITER $$
+USE `testproject`$$
+CREATE DEFINER=`testproject-admin`@`localhost` PROCEDURE `proc_GetData`(
+	IN table_name varchar(50),
+    IN fields varchar(500)
+)
+BEGIN
+	SET @SQL = CONCAT('SELECT ', fields, ' FROM ', table_name);
+    PREPARE stmt FROM @SQL;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;  
 END$$
 
 DELIMITER ;
