@@ -39,7 +39,7 @@ app.controller('ctrl', function ($scope, $timeout, svc, common) {
             proc.then(function (response) {
                 var data = response.data;
                 if (data.ProcessSuccess) {
-                    $scope.header = data.d.List[0];
+                    $scope.header = data.d;
                     SetQueryString(`uid=${$scope.Uid}`);
                 } else {
                     console.log(data.InfoMessage);
