@@ -45,3 +45,7 @@ urlpatterns = [
     path('Common/GetOptions', common_api.GetOptions, name='common_get_options'),
     path('59a31cc6d6ae431a5a9e4b922c95fad743c75b39', sample_views.test, name='test'),
 ]
+
+handler401 = 'samples.views.handler401'
+handler404 = 'samples.views.handler404'
+handler500 = 'samples.views.handler500'

@@ -1,4 +1,3 @@
-/* validation */
 .wrong-input {
     color: #ff8080;
 }
@@ -14,4 +13,3 @@
 input[type="checkbox"].ng-invalid + .text {
     color: red;
 }
-/* --------- */
