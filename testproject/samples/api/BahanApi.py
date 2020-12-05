@@ -8,7 +8,12 @@ from django.contrib.auth.decorators import login_required
 def ListData(request):
     try:
         data = json.loads(request.body)
-        items = BahanController.ListData(data['PageIndex'], data['PageSize'], data['SearchBy'], data['Keywords'])
+        items = BahanController.ListData(
+            PageIndex=data['PageIndex'], 
+            PageSize=data['PageSize'], 
+            SearchBy=data['SearchBy'], 
+            Keywords=data['Keywords']
+        )
         context = {
             'd': items,
             'ProcessSuccess': True

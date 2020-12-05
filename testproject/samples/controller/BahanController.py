@@ -26,7 +26,7 @@ def ListData(PageIndex=1, PageSize=None, SearchBy=None, Keywords=None):
     return data
 
 def GetData(uid):
-    return ListData(1, None, 'A.uid', uid)
+    return ListData(SearchBy='A.uid', Keywords=uid)
 
 def SaveUpdate(header):
     saveParam = ['uid', 'bahan_code', 'bahan_name', 'stock_qty', 'rowstatus', 'modified_by'] # ini parameter yg dikirim ke sp saveupdate
