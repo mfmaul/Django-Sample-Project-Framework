@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from samples import views as sample_views
+from samples import commonApi as common_api
 
 from samples.api import ItemApi as item_api
 from samples.api import BahanApi as bahan_api
@@ -41,5 +42,6 @@ urlpatterns = [
     path('Bahan/List', bahan_views.List, name='bahan_list'),
 
     path('', sample_views.Dashboard, name='dashboard'),
+    path('Common/GetOptions', common_api.GetOptions, name='common_get_options'),
     path('59a31cc6d6ae431a5a9e4b922c95fad743c75b39', sample_views.test, name='test'),
 ]

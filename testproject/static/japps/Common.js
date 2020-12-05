@@ -6,6 +6,20 @@ angular.module('app')
     .service('common', ['$http', function ($http) {
         var self = this;
         
+        self.GetOptions = function (table_name, id_field, name_field) {
+            var params = { 
+                table_name: table_name,
+                id_field: id_field,
+                name_field: name_field
+            }
+            var response = $http({
+                method: "post",
+                url: "/Common/GetOptions",
+                data: JSON.stringify(params),
+                datatype: "json"
+            });
+            return response;
+        }
 
         self.convDate = function (str) {
             var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Agu', 'Sep', 'Oct', 'Nov', 'Dec'];

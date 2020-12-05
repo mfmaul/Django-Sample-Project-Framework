@@ -21,6 +21,21 @@ def AutoCounter(FieldName, TableName, FieldCriteria, ValueCriteria, LengthOfStri
     result = result.record[0]
     return result['AutoCode']
 
+def GetOptions(table_name, id_field, name_field):
+    fields = id_field + ' id,' + name_field + ' name '
+
+    db = dbm.dbcmd()
+    db.commandText = 'proc_GetData'
+    db.commandType = 'StoredProcedure'
+    db.addInParameter('table_name', table_name)
+    db.addInParameter('fields', fields)
+    result = db.Execute()
+    db.clearParameter()
+    db.closeConnection(False)
+
+    result = result.record
+    return result
+
 def PrepareModelDict(param=[], data={}):
     tmp_data = {}
     for key in param:
