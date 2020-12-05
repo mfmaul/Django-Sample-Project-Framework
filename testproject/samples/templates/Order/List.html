@@ -1,0 +1,16 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load common_tags %}
+
+{% block head_content %}
+
+{% endblock %}
+
+{% block content %}
+<div ng-app="app" ng-controller="ctrl">
+    {% csrf_token %}
+    {% verbatim %}
+    
+    {% endverbatim %}
+</div>
+{% endblock %}

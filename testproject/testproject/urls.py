@@ -22,10 +22,12 @@ from samples import commonApi as common_api
 from samples.api import ItemApi as item_api
 from samples.api import BahanApi as bahan_api
 from samples.api import UnitApi as unit_api
+from samples.api import OrderApi as order_api
 
 from samples.app_views import ItemViews as item_views
 from samples.app_views import BahanViews as bahan_views
 from samples.app_views import UnitViews as unit_views
+from samples.app_views import OrderViews as order_views
 
 urlpatterns = [
     path('6eb292a79addf36f91b3660166cf8aa823625525/', admin.site.urls),
@@ -48,6 +50,13 @@ urlpatterns = [
     path('Unit/GetData', unit_api.GetData, name='unit_save_update'),
     path('Unit/Entry', unit_views.Entry, name='unit_entry'),
     path('Unit/List', unit_views.List, name='unit_list'),
+
+    path('Order/ListData', order_api.ListData, name='order_list_data'),
+    path('Order/SaveUpdate', order_api.SaveUpdate, name='order_save_update'),
+    path('Order/GetData', order_api.GetData, name='order_save_update'),
+    path('Order/CloseOrder', order_api.CloseOrder, name='order_close_order'),
+    path('Order/Entry', order_views.Entry, name='order_entry'),
+    path('Order/List', order_views.List, name='order_list'),
 
     path('', sample_views.Dashboard, name='dashboard'),
     path('Common/GetOptions', common_api.GetOptions, name='common_get_options'),
