@@ -10,11 +10,13 @@
         <meta name="author" content="" />
         <link href="{% static 'css/styles.css' %}?id={% Guid %}" rel="stylesheet" />
         <script src="{% static 'js/angular-1.8.0/angular.js' %}"></script>
-        <script src="{% static 'js/font-awesome/all.min.js' %}" crossorigin="anonymous"></script>
-        <script src="{% static 'js/ui-bootstrap-tpls-3.0.7.min.js' %}" crossorigin="anonymous"></script>
         <!-- <script src="{% static 'js/jquery.min.js' %}"></script> -->
-        <script src="{% static 'js/jquery-1-11-0.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap-311.min.js' %}"></script>
+        <!-- <script src="{% static 'js/jquery-1-11-0.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap-311.min.js' %}"></script> -->
+        <link href="{% static 'vendors/bootstrap-4.3.1/css/bootstrap.min.css' %}?id={% Guid %}" rel="stylesheet" />
+        <link href="{% static 'vendors/fontawesome-free-5.9.0/css/all.css' %}?id={% Guid %}" rel="stylesheet" />
+        <script src="{% static 'vendors/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'js/ui-bootstrap-tpls-3.0.7.min.js' %}" crossorigin="anonymous"></script>
         <!-- <script src="{% static 'js/bootstrap.min.js' %}" crossorigin="anonymous"></script> -->
         <script>
             $('.dropdown-toggle').click(function(){
@@ -151,7 +153,8 @@
             </div>
         </div>
         <!-- <script src="{% static 'js/jquery-3.5.1.slim.min.js' %}" crossorigin="anonymous"></script> -->
-        <script src="{% static 'js/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
+        <!-- <script src="{% static 'js/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script> -->
+        <script src="{% static 'vendors/bootstrap-4.3.1/js/bootstrap.bundle.js' %}" crossorigin="anonymous"></script>
         <script>
             (function($) {
                 "use strict";
