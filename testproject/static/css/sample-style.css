@@ -1,3 +1,17 @@
-.sample-style p {
-    font-family: 'Courier New';
+/* validation */
+.wrong-input {
+    color: #ff8080;
 }
+
+    .ng-invalid, .ng-invalid:focus, .ng-invalid:hover, .wrong-input input, .wrong-input input:focus, .wrong-input input:hover {
+        border-color: #ff8080 !important;
+    }
+
+        .ng-invalid:focus, .wrong-input input:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 123, 0, 0.25);
+        }
+
+input[type="checkbox"].ng-invalid + .text {
+    color: red;
+}
+/* --------- */
