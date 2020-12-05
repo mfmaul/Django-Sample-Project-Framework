@@ -21,6 +21,14 @@ angular.module('app')
             return response;
         }
 
+        self.parseDateFromPythonMysql = function (strDate) {
+            var invalid = null;
+            if (!strDate)
+                return invalid;
+
+            return new Date(strDate);
+        };
+
         self.convDate = function (str) {
             var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Agu', 'Sep', 'Oct', 'Nov', 'Dec'];
             var date = new Date(str),
@@ -358,6 +366,17 @@ angular.module('app')
             return input.split(splitChar)[splitIndex];
         }
     });
+
+function CommonFunction($scope) {
+    $scope.isPositiveNumber = function (number, min) {
+        min = min || 1;
+        return parseInt(number) >= min
+    }
+    $scope.validateDateToSave = function (date) {
+        var re = /^\d{1,2}[ /](?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Des|January|February|March|April|May|June|July|August|September|October|November|Desember|\d{1,2})[ /]\d{4}$/;
+        return re.test(date)
+    };
+}
 
 function GetQueryString() {
     var vars = [], hash;

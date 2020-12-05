@@ -34,6 +34,16 @@
                         <label>Item Name</label>
                         <input class="form-control form-control-sm" type="text" ng-model="header.item_name" ng-required="true" />
                     </div>
+
+                    <div class="form-group">
+                        <label>Created By</label>
+                        <input class="form-control form-control-sm" type="text" ng-model="header.created_by" ng-readonly="true" />
+                    </div>
+                    <div class="form-group">
+                        <label>Created Date</label>
+                        <datepicker name="created_date" ng-model="header.created_date" ng-disabled="true"></datepicker>
+                    </div>
+
                 </div>
     
                 <div class="col-sm-12 col-md-4">
@@ -45,6 +55,16 @@
                         <label>Price</label>
                         <input class="form-control form-control-sm" type="text" ng-model="header.price" thousand-separator integer min="1" />
                     </div>
+
+                    <div class="form-group">
+                        <label>Modified By</label>
+                        <input class="form-control form-control-sm" type="text" ng-model="header.modified_by" ng-readonly="true" />
+                    </div>
+                    <div class="form-group">
+                        <label>Modified Date</label>
+                        <datepicker name="modified_date" ng-model="header.modified_date" ng-disabled="true"></datepicker>
+                    </div>
+
                 </div>
             </div>
         </ng-form>

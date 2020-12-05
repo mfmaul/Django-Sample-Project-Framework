@@ -86,7 +86,21 @@ app.controller('ctrl', function ($scope, $timeout, svc, common) {
                 var data = response.data;
                 if (data.ProcessSuccess) {
                     $scope.header = data.d;
+
+                    // fix date on getdata
+                    $scope.header.created_date = common.parseDateFromPythonMysql($scope.header.created_date);
+                    $scope.header.modified_date = common.parseDateFromPythonMysql($scope.header.modified_date);
+                    // end fix date
+
                     $scope.detail = data.d.recipeDetailList;
+
+                    // fix detail date on getdata (kalo datenya mau ditampilin perlu ini, kalo ngga ditampilin gaperlu)
+                    $scope.detail.map(function (d) {
+                        d.created_date = common.parseDateFromPythonMysql(d.created_date);
+                        d.modified_date = common.parseDateFromPythonMysql(d.modified_date);
+                    });
+                    // end fix date
+
                     SetQueryString(`uid=${$scope.Uid}`);
                 } else {
                     console.log(data.InfoMessage);
