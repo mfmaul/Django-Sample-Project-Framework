@@ -508,3 +508,108 @@ END$$
 DELIMITER ;
 ;
 
+USE `testproject`;
+DROP procedure IF EXISTS `usp_mst_unit_ListData`;
+
+DELIMITER $$
+USE `testproject`$$
+CREATE PROCEDURE `usp_mst_unit_ListData`(
+	IN PageIndex INT,
+    IN PageSize INT,
+    IN SearchBy VARCHAR(50),
+    IN Keywords VARCHAR(100),
+    OUT RecordCount INT
+)
+BEGIN
+	SET Keywords = REPLACE(Keywords, ';', '%');
+    IF Keywords IS NULL THEN SET Keywords = ''; END IF;
+    IF SearchBy IS NULL THEN SET SearchBy = ''; END IF;
+    IF PageIndex IS NULL THEN SET PageIndex = 1; END IF;
+    
+    SET @SQL = '
+		FROM mst_unit A
+        WHERE
+			A.rowstatus = 1
+    ';  
+    
+    IF SearchBy = '' OR SearchBy IS NULL THEN
+		SET @SQL = CONCAT(@SQL, '
+			AND (
+				A.unit_code LIKE \'%', Keywords, '%\' OR
+                A.unit_name LIKE \'%', Keywords, '%\'
+            )
+        ');
+	ELSE 
+		SET @SQL = CONCAT(@SQL, 'AND ', SearchBy, ' LIKE \'%', Keywords, '%\'');
+	END IF;
+    
+    SET @CountSQL = CONCAT('SELECT COUNT(*) INTO @RecordCount', @SQL);
+    
+    PREPARE count_stmt FROM @CountSQL;
+	EXECUTE count_stmt;
+	DEALLOCATE PREPARE count_stmt; 
+    
+    SET RecordCount = @RecordCount;
+    
+    SET @SQL = CONCAT('
+		SELECT
+			ROW_NUMBER() OVER(ORDER BY A.unit_code) AS no,
+			A.*
+    ', @SQL);
+    
+    IF PageSize IS NOT NULL THEN
+		SET @SQL = CONCAT(
+			'SELECT * FROM (', @SQL, ') Z WHERE Z.No BETWEEN ', 
+            ((PageIndex - 1) * PageSize + 1), ' AND ', ((PageIndex - 1) * PageSize + PageSize)
+        );
+	END IF;
+    
+    PREPARE stmt FROM @SQL;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt; 
+END$$
+
+DELIMITER ;
+
+USE `testproject`;
+DROP procedure IF EXISTS `usp_mst_unit_SaveUpdate`;
+
+USE `testproject`;
+DROP procedure IF EXISTS `testproject`.`usp_mst_unit_SaveUpdate`;
+;
+
+DELIMITER $$
+USE `testproject`$$
+CREATE DEFINER=`testproject-admin`@`localhost` PROCEDURE `usp_mst_unit_SaveUpdate`(
+	IN uid VARCHAR(50),
+    IN unit_code VARCHAR(50),
+    IN unit_name VARCHAR(100),
+    IN rowstatus INT,
+    IN modified_by VARCHAR(100)
+)
+BEGIN
+	IF NOT EXISTS (SELECT 1 FROM mst_unit A WHERE A.uid = uid) THEN
+		INSERT INTO mst_unit(
+			uid, unit_code, unit_name,
+            rowstatus, created_by, created_date,
+            modified_by, modified_date
+        ) 
+        VALUES(
+			uid, unit_code, unit_name,
+            rowstatus, modified_by, current_timestamp(),
+			modified_by, current_timestamp()
+        );
+    ELSE
+		UPDATE mst_unit A
+        SET
+			A.unit_name = unit_name,
+            A.rowstatus = rowstatus,
+            A.modified_by = modified_by,
+            A.modified_date = current_timestamp()
+		WHERE A.uid = uid;
+    END IF;
+END$$
+
+DELIMITER ;
+;
+
